@@ -7,7 +7,7 @@ version: 0.1.0 Pre-Alpha
 Rationale:
 =========
 
-*BayesBall* is a small collection of Python modules for modelling the probabilistic events-- each of which is a `BayesAction` --that occur in a typical game of baseball. Events, for example, like pitching a baseball, catching a baseball, or stealing home.
+*BayesBall* is a small collection of Python modules for modelling the probabilistic events that occur in a typical game of baseball. Events, for example, like pitching a baseball, catching a baseball, or stealing home.
 
 Every `BayesAction` is a subclass of [`ChainMap`](https://docs.python.org/3/library/collections.html#collections.ChainMap) with the mappings shown below (ordered from last to first):
 
