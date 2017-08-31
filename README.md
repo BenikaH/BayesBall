@@ -43,7 +43,7 @@ where *n* is the number of singles that have happened in the season so far.
 Using *BayesGame*:
 =================
 
-*BayesGame* provides a framework to develop the features of a baseball game simulator. 
+*BayesGame* provides a framework for developing a baseball game simulator. 
 
 Currently, the only dependencies are [NumPy](http://www.numpy.org/) and [SciPy](https://www.scipy.org/scipylib/index.html). 
 
