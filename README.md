@@ -62,9 +62,9 @@ If you are using Mac/Linux, play through a game with a curse-based app:
 Short Term Goals:
 ================
 
-[ ] decide on a systematic way of choosing player attributes, like strength, speed, precision, accuracy, etc.
+- [ ] decide on a systematic way of choosing player attributes, like strength, speed, precision, accuracy, etc.
 
-[ ] determine prior probabilities for pitch/hit outcomes based on player attributes
+- [ ] determine prior probabilities for pitch/hit outcomes based on player attributes
 
 [ ] add weather conditions
 
