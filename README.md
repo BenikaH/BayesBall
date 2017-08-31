@@ -56,7 +56,7 @@ To play through a toy baseball game example, simply run:
 
 If you are using Mac/Linux, play through a game with a curses-based app:
 
-`python app.py`
+`python3 app.py`
 
 
 Short Term Goals:
