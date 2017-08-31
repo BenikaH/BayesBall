@@ -36,7 +36,7 @@ Ideally, `BayesAction` instances should behave semi-autonomously. The average mo
 
 Presently, the underlying logic in the main `BayesAction`-- `PitchEvent` --is unrealistic: it relies too heavily on symmetry assumptions rather than the `Environment` and players in the current lineups.
 
-*BayesBall* is different from baseball simulations which are frequentist in nature: whereas *BayesBall* fixes prior probabilities explicitly, other simulation engines define event probabilities in terms of relative frequencies.  For example, these simulations may calculate the probability that a hit pitch will result in a single by first assuming that, say, at most *N* (= 100,000) hits will occur over the course of a season. If *M* is the number of other hit events that could occur during an at-bat (excluding singles), the probability that an at-bat will result in a single, if a hit event must occur, is just 
+*BayesBall* is different from baseball simulations that are frequentist in nature: whereas *BayesBall* fixes prior probabilities explicitly, other simulation engines define event probabilities in terms of relative frequencies.  For example, these simulations may calculate the probability that a hit pitch will result in a single by first assuming that, say, at most *N* (= 100,000) hits will occur over the course of a season. If *M* is the number of other hit events that could occur during an at-bat (excluding singles), the probability that an at-bat will result in a single, if a hit event must occur, is just 
 
 (*N*-*n*) / (*N*+*M*)
 
