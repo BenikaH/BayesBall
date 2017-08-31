@@ -9,7 +9,7 @@ Rationale:
 
 *BayesBall* is a small collection of Python modules for modelling the probabilistic events that occur in a typical game of baseball. Events, for example, like pitching a baseball, catching a baseball, or stealing home.
 
-Every `BayesAction` is a subclass of [`ChainMap`](https://docs.python.org/3/library/collections.html#collections.ChainMap) with the mappings shown below (ordered from last to first):
+Events are modeled with the `BayesAction` class. Every `BayesAction` is a subclass of [`ChainMap`](https://docs.python.org/3/library/collections.html#collections.ChainMap) with the mappings shown below (ordered from last to first):
 
 - map of the action's reference class:
     - `GameState` : `namedtuple`
@@ -24,7 +24,7 @@ Every `BayesAction` is a subclass of [`ChainMap`](https://docs.python.org/3/libr
     - outcome record : `str`
     - details about the `subjects` : `dict`
 
-Every `BayesActions` determines values for prior probabilities defined over a finite set of action *outcomes*. 
+Every `BayesAction` determines values for prior probabilities defined over a finite set of action *outcomes*. 
 
 These *outcomes* and *prior probabilities* are not intended to be directly changed by the developer. Instead, probability values are initialized (relative to the event's current reference class and action type) and manipulated by the logic internal to a `BayesAction` instance. 
 
