@@ -1,13 +1,13 @@
 # BayesBall
 
-## version: 0.1.0 Pre-Alpha
+written by: Chris French
 
+version: 0.1.0 Pre-Alpha
 
-Rational:
-========
+Rationale:
+=========
 
 *BayesBall* is a small collection of Python modules for modelling the probabilistic events that occur in a typical game of baseball: events, for example, like pitching a baseball, catching a baseball, or stealing home from third base.
-
 
 Every *BayesObject* is a subclass of [`ChainMap`](https://docs.python.org/3/library/collections.html#collections.ChainMap) with the maps shown below, ordered from last to first:
 
@@ -30,7 +30,7 @@ Ideally, `BayesEvent` instances should behave semi-autonomously.
 
 The average modeller should never manipulate these prior probabilities directly--but only indirectly, by manipulating the *context* of an event. That is, by altering its *reference class*: by changing its state, if possible, and its environment.
 
-In contrast to more frequentist simulations.
+The BayesBall simulation approach is different from frequentist simulations, which define event probabilities as relative frequencies. For example, to determine if a hit will result in a single, it is assume, say, N = 100,000 hits will occur in a season. The probability that a hit will occur at any given at bat is just 1/*N*. The number of available hits, *N*, decreases as the season progresses. 
 
 
 Using *BayesGame*:
@@ -38,14 +38,31 @@ Using *BayesGame*:
 
 *BayesGame* provides a framework with which to develop the features of a baseball game. Currently, however, not many features are implemented.
 
-The follow is what is implemented:
+Currently, the only dependencies are [NumPy](http://www.numpy.org/) and [SciPy](https://www.scipy.org/scipylib/index.html). 
 
+To install these dependencies, use
+
+`pip3 install numpy`
+
+and
+
+`pip3 install scipy`
+
+and that's it. Aside from Python's [curses](https://docs.python.org/3/library/curses.html#module-curses) library, there are no other dependencies.
+
+To play through a toy baseball game example, simply run:
+
+`python3 game.py`
+
+If you are using Mac/Linux, play through a game with a curse-based app:
+
+`python app.py`
 
 
 Short Term Goals:
 ================
 
-[ ] have a systematic way of choosing player attributes, like strength, speed, precision, accuracy, etc.
+[ ] decide on a systematic way of choosing player attributes, like strength, speed, precision, accuracy, etc.
 
 [ ] determine prior probabilities for pitch/hit outcomes based on player attributes
 
@@ -91,7 +108,7 @@ Short Term Goals:
 
 [ ] force runners to go back if the ball is caught!
 
-
+[ ] catch success penalties for not good throw results
 
 
 Long Term Goals:
@@ -112,4 +129,4 @@ Long Term Goals:
 
 [ ] Create a separate library for modifying the prior probabilities of a  *BayesBall* game instance (including *BayesBall* players) so that simulations using this instance more closely predict, on average, the observed relative frequencies from historical baseball data. 
 
-[^1]:  Some *Events*, like the *ShiftEvent* are to be used by a developer, or some other agent, like swapping players in a lineup, or are used internally in the game logic, like recording an out. These are deterministic events -- but because deterministic events are just probabilistic events defined over the possible probability values \{0,1\}, they are still strictly *BayesEvents*.
+[^1]:  Some *Events*, like `ShiftEvent`, can be used to swap or sup players during a game. These are deterministic events -- but because deterministic events are just probabilistic events defined over the possible probability values \{0,1\} --they are still *BayesEvents*.
