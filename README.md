@@ -40,7 +40,7 @@ Presently, the underlying logic in the main `BayesAction`-- `PitchEvent` --is un
 
 (*N*-*n*) / (*N*+*M*)
 
-where *n* is the number of singles that have happened in the season so far.
+where *n* is the number of singles which have already occurred in the season. 
 
 Using *BayesGame*:
 =================
