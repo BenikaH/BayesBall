@@ -30,7 +30,7 @@ These *outcomes* and *prior probabilities* are not intended to be directly chang
 
 In other words, prior probability values are fixed by the logic encapsulated within `BayesEvent` class methods. This is a feature, not a bug. 
 
-Ideally, `BayesEvent` instances should behave semi-autonomously. The average modeller should never manipulate these prior probabilities directly--but only indirectly, by manipulating the *context* of an event. That is, by altering its *reference class*: by changing its state, if possible, and its environment.
+Ideally, `BayesEvent` instances should behave semi-autonomously. The average modeller should never manipulate these prior probabilities directly--but only indirectly, by manipulating the *context* of an event. That is, by altering its *reference class*: by changing the 'GameState' and, if possible, the `Environment`.
 
 Presently, however, the underlying logic in the main `BayesEvent`-- `PitchEvent` --is unrealistic: it relies too heavily on symmetry assumptions rather than the `Environment` and players in the current lineups.
 
