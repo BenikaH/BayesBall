@@ -1,7 +1,7 @@
 """Written by:  Christopher F. French
         email:  cffrench.writes@gmail.com
          date:  2017
-      version:  0.0.1
+      version:  0.1.0
 
 This is a pre-alpha, broken, version of BayesBall.
 
@@ -30,19 +30,19 @@ from context import outcome_records
 from copy import deepcopy
 
 def flatten(d, label):
-            assert isinstance(d, dict)
-            catch = []
-            for k, v in d.items():
-                if isinstance(v, dict):
-                    v = deepcopy(v)
-                    if label:
-                        catch.extend(flatten(v, label))
-                    else:
-                        v = deepcopy(v)
-                        catch.extend(flatten(v, k))
-                else:
-                    catch.append((label, v))
-            return catch
+    assert isinstance(d, dict)
+    catch = []
+    for k, v in d.items():
+        if isinstance(v, dict):
+            v = deepcopy(v)
+            if label:
+                catch.extend(flatten(v, label))
+            else:
+                v = deepcopy(v)
+                catch.extend(flatten(v, k))
+            else:
+                catch.append((label, v))
+    return catch
 
                 
 event_map = flatten(outcome_records, None)

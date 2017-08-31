@@ -6,17 +6,38 @@ import context as con
 from collections import namedtuple
 from copy import deepcopy
 
+"""Written by:  Christopher F. French
+        email:  cffrench.writes@gmail.com
+         date:  2017
+      version:  0.1.0
 
+This is a pre-alpha, broken, version of BayesBall.
+
+--------------------------------------------------------------------------------
+This file is part of BayesBall.
+
+BayesBall is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+BayesBall is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with BayesBall.  If not, see <http://www.gnu.org/licenses/>.
+--------------------------------------------------------------------------------
 """
-misc: needs a home?
-"""
+
+"""Not used"""
 def bbdata(velocity=86, angle=45, z_spin=.2, y_spin=.2):
     return BaseBall(
         velocity=velocity, angle=angle,
         z_spin=z_spin, y_spin=y_spin
     )
 
-    
 def inverse_logistic(Wa,Xa,b):
     terms = np.inner([Wa], [Xa]) + b
     bot = 1-np.exp(terms)
@@ -42,8 +63,6 @@ def sample_on(name, *args):
         return NotImplemented
     else:
         return NotImplemented
-
-
 
 def match(rec, rec_format):
     format_splits = rec_format.split(':')
@@ -131,6 +150,7 @@ def gappy_to_probs(gaps, prob_dist):
     )
 
 def populate_random_roster(rostersize, player_cls, Positions, Team):
+    """quick and dirty way to build teams, including roster/lineup"""
     assert rostersize >= 9
     assert isinstance(Positions, list)
     # randomly choose twenty five numbers, for player numbers.
@@ -176,14 +196,6 @@ def populate_random_roster(rostersize, player_cls, Positions, Team):
     home_lineup = permutation(home_lineup)
     away_lineup = permutation(away_lineup)
 
-    home = Team(
-        home_name,
-        home_lineup,
-        home_bench
-    )
-    away = Team(
-        away_name,
-        away_lineup,
-        away_bench
-    )    
+    home = Team(home_name, home_lineup, home_bench)
+    away = Team(away_name, away_lineup, away_bench)    
     return home, away

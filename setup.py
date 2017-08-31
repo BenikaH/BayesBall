@@ -31,6 +31,6 @@ setup(
     ],
     keywords='baseball simulation probability',
     packages=find_packages(exclude=['contrib', 'docs', 'tests']),
-    install_requires=['numpy'],
+    install_requires=['numpy, scipy'],
     python_requires='>=3'
 )

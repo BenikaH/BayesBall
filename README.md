@@ -1,5 +1,6 @@
 # BayesBall
-### version: 0.0.1 pre-alpha
+
+## version: 0.1.0 Pre-Alpha
 
 
 Rational:

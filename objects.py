@@ -3,7 +3,7 @@
 """Written by:  Christopher F. French
         email:  cffrench.writes@gmail.com
          date:  2017
-      version:  0.0.1
+      version:  0.1.0
 
 This is a pre-alpha, broken, version of BayesBall.
 

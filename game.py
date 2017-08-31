@@ -3,7 +3,7 @@
 """Written by:  Christopher F. French
         email:  cffrench.writes@gmail.com
          date:  2017
-      version:  0.0.1
+      version:  0.1.0
 
 This is a pre-alpha, broken, version of BayesBall.
 
@@ -30,7 +30,6 @@ from collections import deque, namedtuple
 from copy import deepcopy
 from math import modf
 
-"""3rd Party modules"""
 import numpy as np
 
 """BayesBall modules"""
@@ -61,7 +60,6 @@ NullLocations = Locations(*[None]*len(location_names))
 
 """Currently not implemented"""
 BaseBall = namedtuple('BaseBall',['velocity', 'angle', 'z_spin', 'y_spin'])
-
 
 class _BayesGame(deque):
     """Base Game Class Template.
@@ -236,10 +234,10 @@ class BaseBallGame(BayesGame):
         pos_new = new.pos
         old._pos = pos_new
         new._pos = pos_old
-        # make sure to update self.locations!!!
         self.initial_upkeep()
 
     def win(self, I):
+        """Returns True if the current game is over, False otherwise. """
         win = False
         scores = self.gamestate.score
         if I >= 9 and (scores.home > scores.away):
@@ -259,6 +257,7 @@ class BaseBallGame(BayesGame):
         return True
         
     def action_move(self, player, n, m, option='move'):
+        """Method to construct a Move BayesEvent"""
         assert isinstance(n, int)
         assert isinstance(m, int)
         move = self.play_next_state(MoveEvent, option, player, n, m)
@@ -270,6 +269,7 @@ class BaseBallGame(BayesGame):
         return move
 
     def action_tag(self, tagger, tagged):
+        """Method to construct a Tag BayesEvent"""
         tag = self.play_next_state(TagEvent, None, None, tagger, tagged)
         if self.debug:
             catch = []
@@ -280,6 +280,7 @@ class BaseBallGame(BayesGame):
         return tag
             
     def action_throw(self, thrower, location):
+        """Method to construct a Throw BayesEvent"""
         throw = self.play_next_state(ThrowEvent, None,
                                      None, thrower, location)
         if self.debug:
@@ -291,6 +292,7 @@ class BaseBallGame(BayesGame):
         return throw
             
     def action_catch(self, ball, location):
+        """Method to construct a Catch BayesEvent"""
         catch = self.play_next_state(CatchEvent, None, ball, location)
         if self.debug:
             bucket = [] 
@@ -301,6 +303,7 @@ class BaseBallGame(BayesGame):
         return catch
 
     def action_shift(self, option, pstack=[], vstack=[]):
+        """Method to construct a Shift BayesEvent"""
         shift = self.play_next_state(ShiftEvent, option, pstack, vstack)
         if self.debug:
             catch = []
@@ -310,6 +313,12 @@ class BaseBallGame(BayesGame):
         return shift
         
     def play_next_state(self, action_cls, shift_option, *subjects):
+        """Main method for transitioning between gamestates
+
+        action_cls : BayesEvent class
+        shift_option : str
+        subjects : list
+        """
         assert action_cls.isaction(action_cls.__name__)
         basenames = ['firstbase', 'secondbase', 'thirdbase']
         global records
@@ -320,7 +329,7 @@ class BaseBallGame(BayesGame):
             Paramaters:
             ==========
             N : int
-            batter_move : Boolean
+            batter_move : bool (default: True)
             """
             assert isinstance(N, int)
             if self.locations.thirdbase:
@@ -348,6 +357,7 @@ class BaseBallGame(BayesGame):
                         throw_arc(thrower, target, tagged)
 
         def catcher_catch_pitch(pitch_result):
+            """Main sequence for Catcher catching a pitch"""
             c_catch = self.action_catch(None, catcher)
             homesteal = False
             stealers = []
@@ -416,8 +426,7 @@ class BaseBallGame(BayesGame):
         )
         
         if action.has_name('PitchEvent'):
-            pitch = action
-            
+            pitch = action            
             """First: check if runners will leadoff/steal"""
             bases = []
             for n in basenames:
@@ -428,6 +437,10 @@ class BaseBallGame(BayesGame):
                     bases.append((n, player))
             self.pitcher.make_decision('pick-off', bases)
             if self.pitcher.pick_off:
+                """If there is a pitch-out, after the throw/catch/tag
+                sequence is over, the play ends and a new pitch event
+                has to start.
+                """
                 loc = self.pitcher.pickoff_location
                 base = loc.split('base')[0]
                 fielder = getattr(self.locations, base)
@@ -436,7 +449,7 @@ class BaseBallGame(BayesGame):
                 record = 'pitchout:{}'.format(fielder.pos)
                 pitch['outcome'] = Outcome('pitch_out', record, {})
                 return pitch
-
+                
             pitch.make_happen
 
             contacts = records['pitch']['contact']
@@ -481,6 +494,7 @@ class BaseBallGame(BayesGame):
                 self.add_record(pitch.record)
 
             elif pitch.result == 'wild':
+                """wild pitch"""
                 if self.locations.firstbase:
                     if self.locations.secondbase:
                         if self.locations.thirdbase:
@@ -500,10 +514,12 @@ class BaseBallGame(BayesGame):
                 if catch.result == 'yes':
                     """NOT REALISTIC YET
                     
-                    Also, what about attempts at double/triple plays?
+                    Also, what about attempts at
+                    double/triple plays?
 
-                    ALSO: if the ball is GROUNDBALL, runners can still run!
-                    - so sacflys, etc. are not possible at the moment!!!
+                    ALSO: if the ball is GROUNDBALL,
+                    runners can still run! ... so sacflys,
+                    etc. are not possible at the moment!!!
                     """
                     rec_dict = records['pitch']['outs']
                     record = choice(list(rec_dict.values()))
@@ -579,9 +595,12 @@ class BaseBallGame(BayesGame):
                     err_msg.format(pitch.name, pitch.result, pitch.record)
                 )
 
-                """Tail end of PitchEvent:
+            """Tail end of PitchEvent:
 
             Now we have to check if a triple/double play occured.
+
+
+            THIS PART IS BROKEN.
             """
             initial_outs = self.gamestate.count.outs
             initial_runners = sum(self.gamestate.bases)
@@ -616,10 +635,7 @@ class BaseBallGame(BayesGame):
             if (FLYO > -1) and SCORE:
                 self.add_record('SF', self[FLYO].time)
 
-                """
-            This secion needs to be fixed.
-
-            In baseball, triple/double plays are recorded like:
+            """In baseball, triple/double plays are recorded like:
 
             3-6*-5, where 6* is a position that is a transition
             between positions 3 and 5, but player 6 did NOT make
@@ -627,13 +643,13 @@ class BaseBallGame(BayesGame):
 
             Below, I just record the players who make outs.
 
-            Good enough for now.
+            Good enough for now ... BUT STILL BROKEN
             """
             if triple_possible and len(out_events) == 3:
                 out_events.sort()
                 playernums = []
                 max_time = 0
-                for t, *p in out_events:
+                for t, p in out_events:
                     playernums.extend(p)
                     max_time = max(t, max_time)
                 num = len(playernums)
@@ -650,7 +666,7 @@ class BaseBallGame(BayesGame):
                 out_events.sort()
                 playernums = []
                 max_time = 0
-                for t, *p in out_events:
+                for t, p in out_events:
                     playernums.extend(p)
                     max_time = max(t, max_time)
                 num = len(playernums)
@@ -683,11 +699,16 @@ class BaseBallGame(BayesGame):
                 
                 return catch
             except GameError as ge:
+                """BROKEN, needs to be fixed.
+
+                Originally, the below code was going to be used
+                for when a catch is missed, but fielders still
+                need to throw out runners.
+                """
 
                 # fresh copy of locations!
                 locs = self.locations
-                """
-                Update where the runners are heading next
+                """Update where the runners are heading next
                 right now: they automatically try to get to the
                 next base when there is an error, which is NOT
                 entirely realistic.
@@ -722,8 +743,12 @@ class BaseBallGame(BayesGame):
                         infield = ['3B', 'SS', '2B', '1B']
                         of_nums = [Postions.index(s) for s in outfield]
                         in_nums = [Postions.index(s) for s in infield]
-                        left_side_outfield = [self.locations.left, self.locations.center]
-                        right_side_outfield = [self.locations.center, self.locations.right]
+                        left_side_outfield = [
+                            self.locations.left, self.locations.center
+                        ]
+                        right_side_outfield = [
+                            self.locations.center, self.locations.right
+                        ]
 
                         # probabilities for which new fielder
                         # picks up the ball that the old fielder
@@ -795,7 +820,6 @@ class BaseBallGame(BayesGame):
                         )
             """End of except case for CatchEvent."""
             
-
         elif action.has_name('TagEvent'):
             tag = action
             tag.make_happen
@@ -871,6 +895,17 @@ class BaseBallGame(BayesGame):
 
     @property
     def change_lineup(self):
+        """This is the central function that makes sure
+        the next batter gets to bat after a walk/hit/strikeout,
+        or hit-by-pitch, etc.
+
+        WARNING: it is up to the coder to manually add the
+        piece of code
+
+            self._batter_done = False
+
+        when a batter should be finished after a play.
+        """
         order = self.gamestate.inning.order
         if order == 'top':
             if self.batter_finished:
@@ -893,7 +928,6 @@ class BaseBallGame(BayesGame):
                     self.pitcher = p
         else:
             raise Exception('Bad Inning Order {}'.format(order))
-
     
     def upkeep(self, I):
         """Updates the game information at the start of a new inning."""
@@ -903,6 +937,7 @@ class BaseBallGame(BayesGame):
             
     @property
     def play(self, debug=True):
+        """Play through a pitch event."""
         self.change_lineup
         pitch = self.play_next_state(
             PitchEvent,
@@ -938,11 +973,9 @@ class BaseBallGame(BayesGame):
         """
         return NotImplementedError
         
-        
-        
-    
-"""Game"""
-def play_baseball_game(rec):
+
+def play_baseball_game():
+    """Watch a baseball game get played."""
     os.system('clear||clr')
     game = BaseBallGame(None, None, True)
     innings = count(1, .5)
@@ -967,5 +1000,4 @@ def play_baseball_game(rec):
     input('\n bayesball instance finished. \n press enter to exit.')
 
 if __name__ == '__main__':
-    play_baseball_game(None)
-    
+    play_baseball_game()

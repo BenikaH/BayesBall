@@ -1,28 +1,35 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Created on Fri Jul  7 22:18:20 2017
+"""Written by:  Christopher F. French
+        email:  cffrench.writes@gmail.com
+         date:  2017
+      version:  0.1.0
 
-@author: christopherfrench
+This is a pre-alpha, broken, version of BayesBall.
+
+--------------------------------------------------------------------------------
+This file is part of BayesBall.
+
+BayesBall is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+BayesBall is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with BayesBall.  If not, see <http://www.gnu.org/licenses/>.
+--------------------------------------------------------------------------------
 """
-# import math
 from itertools import zip_longest, chain
 from collections import namedtuple
 import numpy as np
 
-
 actions = ['start', 'pitch', 'throw', 'catch', 'move', 'tag', 'shift']
 
-"""The 'misc' outcomes
-
-I do this so it's easy to add and
-modify top-level outcome possibilities.
-
-I use a separate module, outcomes.py,
-to view and manipulate these static
-structures into something a bit more
-probability friendly. 
-"""
 outcomes = dict(
     [(actions.index('start'),[]),
      (actions.index('pitch'), [
@@ -44,9 +51,6 @@ outcomes = dict(
          'sub', 'strat', 'Score', 'Out'
      ])]
 )
-
-game_context_format = ['away_team', 'home_team', 'game_data']
-game_data_format = []
 
 action_context_format = dict(
     [(actions.index('start'), []),
@@ -70,40 +74,7 @@ action_context_format = dict(
      ])]
 )
 
-"""Return an outcome result key.
 
-Why include action key too? 
-Redundancy, for sanity error checking later: we 
-have to make sure all actions generate the right 
-kinds of outcomes.
-"""
-def oc_name(action_pos, outcome_pos):
-    action = actions[action_pos]
-    oc_list = outcomes.get(actions.index(action))
-    # if not oc_list[oc_position] is outcomes:
-    #    raise Exception("Bad Action, Out_Key: {}".format(action) )
-    try:
-        return action + "_" + oc_list[outcome_pos]
-    except TypeError:
-        print(
-            '{} and {} not found in {}'.format(
-                action, outcome_pos, oc_list
-            )
-        )
-    finally:
-        pass
-"""
-Format dict for record keeping outcomes,
-it is quite ugly; but it works, for now.
-
-to do:
-=====
-[ ] foul tip, strike three; record: 'FT'
-[ ] fielder's choie; record: 'FC'
-[ ] hit by pitch, batter swings, should result in a strike!
-[ ] hit by ptich, batter does/doesn't try to move out of way of ball
-
-"""
 outcome_records = dict(
     pitch=dict(
         walk=dict(w='W'),
@@ -189,7 +160,7 @@ outcome_records = dict(
 ) 
         
 
-      
+
 """Helper Functions to Build Contexts"""
 def arg_dump(*args, form):
     zip_longest(args, form, fill='<MISSING>')

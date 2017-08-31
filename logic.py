@@ -3,7 +3,7 @@
 """Written by:  Christopher F. French
         email:  cffrench.writes@gmail.com
          date:  2017
-      version:  0.0.1
+      version:  0.1.0
 
 This is a pre-alpha, broken, version of BayesBall.
 
@@ -120,8 +120,6 @@ class GameState(object):
         Paramaters:
         ==========
         reset_all : Boolean (default: False)
-
-        
         
         Usage: to reset count and change to a runner on
         first, after the home team scores a run, after

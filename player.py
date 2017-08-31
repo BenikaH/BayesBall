@@ -1,6 +1,29 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+"""Written by:  Christopher F. French
+        email:  cffrench.writes@gmail.com
+         date:  2017
+      version:  0.1.0
 
+This is a pre-alpha, broken, version of BayesBall.
+
+--------------------------------------------------------------------------------
+This file is part of BayesBall.
+
+BayesBall is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+BayesBall is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with BayesBall.  If not, see <http://www.gnu.org/licenses/>.
+--------------------------------------------------------------------------------
+"""
 from collections import namedtuple, defaultdict
 import numpy as np
 from functools import partial
@@ -10,12 +33,6 @@ import context as con
 from scipy.stats import truncnorm
 
 choice = np.random.choice
-
-
-# import categories as cat
-# from outcomes import Tree
-# import tensorflow as tf
-
 
 SCALE = 10
 attribute_default = 1
@@ -35,8 +52,6 @@ def pos_from_str(pos_name):
     assert pos_name in Positions
     return Positions.index(pos_name)
 
-    
-    
 class BasePlayer(object):
     def __init__(self, num=0, pos=pos_from_str('Bench'), team=None):
         super().__init__()

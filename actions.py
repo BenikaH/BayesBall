@@ -36,7 +36,6 @@ from copy import deepcopy
 import math
 
 from objects import BayesAction, Action, Outcome, ReferenceClass, __empty__
-from base_ball import BaseBall
 from context import outcome_records
 from player import BaseBallPlayer
 from game_exceptions import GameException, GameInjury, GameError
@@ -45,11 +44,11 @@ from helpers import categorical_dist, build_subjects, cond_dampen
 choice = np.random.choice
 
 def action_prior(**fields):
+    """Returns a prior distribution from paramaters, fields."""
     prior = namedtuple('Prior', fields.keys())(**fields)
     assert math.isclose(sum(prior), 1, rel_tol=.0001) 
     return prior
 
-    
 class StartEvent(BayesAction):
     """Intial event, which can be used for debugging and deque
     manipulation purposes.
@@ -74,8 +73,7 @@ class StartEvent(BayesAction):
     
         
 class _X_BayesAction(BayesAction):
-    """
-    Template for Event Classes during a Bayes Game"""
+    """Template for Event Classes during a Bayes Game"""
     def __init__(self, state=None, environment=None,
                  action_name=__empty__, *subject_args):
         
@@ -107,7 +105,14 @@ class _X_BayesAction(BayesAction):
         return np.random.choice(outcomes, p=probs_values)
     
 class CatchEvent(_X_BayesAction):
-    
+    """CatchEvent
+
+    Outcomes:
+    ========
+    - Yes
+    - Miss (player unable to catch a ball)
+    - Drop (can cause an error)
+    """
     def __init__(self, state, environment, *subject_args):
         super().__init__(state, environment, 'catch', *subject_args)
 
@@ -135,8 +140,16 @@ class CatchEvent(_X_BayesAction):
         self['outcome'] = Outcome(outcome, complete_record, details)
             
 class ThrowEvent(_X_BayesAction):
-    """BayesAction class for throwing a baseball from one fielder to another.
-    (Note: Player pitch events are handled by a different class, PitchEvent.) 
+    """BayesAction class for throwing a baseball between fielders.
+
+    Outcomes:
+    ========
+    - good
+    - dirt
+    - low throw
+    - high throw
+
+    (At the moment, these outcomes do not have any negative consequences!)
     """
     def __init__(self, state, environment, *subject_args):
         super().__init__(state, environment, 'throw', *subject_args)
@@ -182,7 +195,16 @@ class MoveEvent(_X_BayesAction):
         details = dict(from_base=from_base, to_base=to_base, player=player)
         self['outcome'] = Outcome(outcome, complete_record, details)
         
-class TagEvent(_X_BayesAction):   
+class TagEvent(_X_BayesAction):
+    """Tag Event, which is used primarily for tagging a runner
+    as a base, like homeplate or first base.
+
+    Outcomes:
+    ========
+    
+    - safe
+    - out
+    """
     def __init__(self, state=None, environment=None, *subject_args):
         super().__init__(state, environment, 'tag', *subject_args)
         
@@ -488,6 +510,7 @@ class PitchEvent(_X_BayesAction):
 
 
 if __name__ == '__main__':
+    """For debugging purposes"""
     from logic import GameState
     Environment = namedtuple(
         'Environment',
