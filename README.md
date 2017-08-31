@@ -7,11 +7,11 @@ version: 0.1.0 Pre-Alpha
 Rationale:
 =========
 
-*BayesBall* is a small collection of Python modules for modelling the probabilistic events that occur in a typical game of baseball. Events, for example, like pitching a baseball, catching a baseball, or stealing home.
+*BayesBall* is a small collection of Python modules for modelling the probabilistic events-- each of which is a `BayesAction` --that occur in a typical game of baseball. Events, for example, like pitching a baseball, catching a baseball, or stealing home.
 
-Every *BayesObject* is a subclass of [`ChainMap`](https://docs.python.org/3/library/collections.html#collections.ChainMap) with the mappings shown below (ordered from last to first):
+Every `BayesAction` is a subclass of [`ChainMap`](https://docs.python.org/3/library/collections.html#collections.ChainMap) with the mappings shown below (ordered from last to first):
 
-- map of the event's reference class:
+- map of the action's reference class:
     - `GameState` : `namedtuple`
     - `Environment` : `namedtuple`
 
@@ -19,20 +19,22 @@ Every *BayesObject* is a subclass of [`ChainMap`](https://docs.python.org/3/libr
     - action type : `str` 
     - action inputs, the `subjects` : `list`
   
-- map of the *outcome*:
+- map of the action *outcome*:
     - outcome result : `str`
     - outcome record : `str`
     - details about the `subjects` : `dict`
 
-Every *BayesEvent* is a subclass of a *BayesObject*. What distinguishes a game *Event* from a game *Object* is that *Events* have prior probabilities defined over a finite set of *outcomes*.[1] 
+Every `BayesActions` determines values for prior probabilities defined over a finite set of action *outcomes*. 
 
-These *outcomes* and *prior probabilities* are not intended to be directly changed by the developer. Instead, *outcomes* are initialized (relative to the event's current reference class and action type) and manipulated by the logic internal to the *BayesEvent* itself. 
+These *outcomes* and *prior probabilities* are not intended to be directly changed by the developer. Instead, probability values are initialized (relative to the event's current reference class and action type) and manipulated by the logic internal to a `BayesAction` instance. 
 
-In other words, prior probability values are fixed by the logic encapsulated within `BayesEvent` class methods. This is a feature, not a bug. 
+In other words, prior probability values are fixed by the logic encapsulated within `BayesAction` class methods. 
 
-Ideally, `BayesEvent` instances should behave semi-autonomously. The average modeller should never manipulate these prior probabilities directly--but only indirectly, by manipulating the *context* of an event. That is, by altering its *reference class*: by changing the `GameState` and, if possible, the `Environment`.
+This is a feature, not a bug. 
 
-Presently, however, the underlying logic in the main `BayesEvent`-- `PitchEvent` --is unrealistic: it relies too heavily on symmetry assumptions rather than the `Environment` and players in the current lineups.
+Ideally, `BayesAction` instances should behave semi-autonomously. The average modeller should never manipulate these prior probabilities directly--but only indirectly, by manipulating the *context* of an event. That is, by altering its *reference class*: by changing the `GameState` and, if possible, the `Environment`.
+
+Presently, the underlying logic in the main `BayesAction`-- `PitchEvent` --is unrealistic: it relies too heavily on symmetry assumptions rather than the `Environment` and players in the current lineups.
 
 *BayesBall* is different from baseball simulations which are frequentist in nature: whereas *BayesBall* fixes prior probabilities explicitly, other simulation engines define event probabilities in terms of relative frequencies.  For example, these simulations may calculate the probability that a hit pitch will result in a single by first assuming that, say, at most *N* (= 100,000) hits will occur over the course of a season. If *M* is the number of other hit events that could occur during an at-bat (excluding singles), the probability that an at-bat will result in a single, if a hit event must occur, is just 
 
@@ -133,7 +135,5 @@ Long Term Goals:
 - [ ] Store past stats, including past stats relative to batters/pitchers/teams played.
 
 - [ ] Create a separate library for modifying the prior probabilities of a  *BayesBall* game instance (including *BayesBall* players) so that simulations using this instance more closely predict, on average, the observed relative frequencies from historical baseball data. 
-
-[1]:  Some *Events*, like `ShiftEvent`, can be used to swap or sup players during a game. These are deterministic events -- but because deterministic events are just probabilistic events defined over the possible probability values \{0,1\} --they are still *BayesEvents*.
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
