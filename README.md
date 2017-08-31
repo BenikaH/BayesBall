@@ -109,7 +109,7 @@ Short Term Goals:
         if so, check which base the
         catcher should throw to.
 		
-- [ ] third strike, catcher drops ball, batter isnt' out...
+- [ ] third strike, catcher drops ball, batter isn't out...
 
 - [ ] give base stealers a benefit for stealing
 
