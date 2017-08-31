@@ -133,6 +133,4 @@ Long Term Goals:
 
 [1]:  Some *Events*, like `ShiftEvent`, can be used to swap or sup players during a game. These are deterministic events -- but because deterministic events are just probabilistic events defined over the possible probability values \{0,1\} --they are still *BayesEvents*.
 
-- Chris French
-
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
