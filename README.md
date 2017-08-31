@@ -54,7 +54,7 @@ To play through a toy baseball game example, simply run:
 
 `python3 game.py`
 
-If you are using Mac/Linux, play through a game with a curse-based app:
+If you are using Mac/Linux, play through a game with a curses-based app:
 
 `python app.py`
 
