@@ -38,13 +38,12 @@ def flatten(d, label):
             if label:
                 catch.extend(flatten(v, label))
             else:
-                v = deepcopy(v)
                 catch.extend(flatten(v, k))
-            else:
-                catch.append((label, v))
+        else:
+            catch.append((label, v))
     return catch
 
-                
+
 event_map = flatten(outcome_records, None)
 
 def get_rec_label(rec):
